@@ -7,7 +7,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext.blobstore import blobstore
 
-from models import Album, Photo
+from models import Album, Photo, Comment
 
 env = jinja2.Environment(
     loader=jinja2.FileSystemLoader('templates')
@@ -78,10 +78,15 @@ class ViewAlbumHandler(BaseHandler):
                 ancestor=album.key
             ).order(Photo.date_created)
 
+            comments_query = Comment.query(
+                ancestor=album.key
+            ).order(-Photo.date_created)
+
             template_values = {
                 'user': user,
                 'album': album,
                 'photos': photo_query.fetch(None),
+                'comments': comments_query.fetch(None),
             }
 
             self.render_template('view_album.html', template_values)
@@ -143,3 +148,21 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
         )
 
         self.send_blob(blobstore.BlobInfo.get(photo.blob_info_key))
+
+
+class AddCommentHandler(BaseHandler):
+
+    def post(self, album_id):
+        user = users.get_current_user()
+        album = Album.get_by_id(
+            int(album_id),
+            parent=ndb.Key('User', user.email())
+        )
+
+        comment = Comment(parent=album.key)
+        comment.text = self.request.get('comment_text')
+        comment.author = user.email()
+
+        comment.put()
+
+        self.redirect('/album/%s/view' % album.key.integer_id())

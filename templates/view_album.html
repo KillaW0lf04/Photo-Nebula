@@ -27,6 +27,25 @@
         {% endfor %}
     </div>
 
+    <div id="comments">
+        <h3>Comments left by Users</h3>
+
+        {% for comment in comments %}
+            <div class="comment">
+                <b>[{{ comment.date_created }}] {{ comment.author }} said: </b>
+                <blockquote>{{ comment.text }}</blockquote>
+            </div>
+        {% endfor %}
+
+        <h3>Leave a Comment:</h3>
+        <form method="post" action="/album/{{ album.key.integer_id() }}/add-comment">
+            <textarea id="comment_text" name="comment_text"></textarea>
+
+            <br>
+            <input type="submit" value="Add Comment"/>
+        </form>
+    </div>
+
     <script type="text/javascript">
         var $container = $('#container');
 
