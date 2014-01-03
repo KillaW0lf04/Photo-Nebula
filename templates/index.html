@@ -30,7 +30,7 @@
         </p>
         <ul>
         {% for album in albums %}
-            <li><a href="/album/view/{{ album.key.integer_id() }}">{{ album.name }}</a></li>
+            <li><a href="/album/{{ album.key.integer_id() }}/view">{{ album.name }}</a></li>
         {% endfor %}
         </ul>
     </div>

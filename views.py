@@ -4,6 +4,9 @@ import jinja2
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
+from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.ext.blobstore import blobstore
+
 from models import Album, Photo
 
 env = jinja2.Environment(
@@ -55,7 +58,7 @@ class CreateAlbumHandler(BaseHandler):
 
         album.put()
 
-        self.redirect('/album/view/%s' % album.key.integer_id())
+        self.redirect('/album/%s/view' % album.key.integer_id())
 
 
 class ViewAlbumHandler(BaseHandler):
@@ -66,9 +69,70 @@ class ViewAlbumHandler(BaseHandler):
             parent=ndb.Key('User', user.email())
         )
 
+        photo_query = Photo.query(
+            ancestor=album.key
+        ).order(Photo.date_created)
+
         template_values = {
             'user': user,
             'album': album,
+            'photos': photo_query.fetch(None),
         }
 
         self.render_template('view_album.html', template_values)
+
+
+class AddPhotoHandler(BaseHandler):
+    def get(self, album_id):
+        user = users.get_current_user()
+        album = Album.get_by_id(
+            int(album_id),
+            parent=ndb.Key('User', user.email())
+        )
+        upload_url = blobstore.create_upload_url(
+            '/album/%s/upload-photo' % album.key.integer_id()
+        )
+
+        template_values = {
+            'user': user,
+            'album': album,
+            'upload_url': upload_url,
+        }
+
+        self.render_template('add_photo.html', template_values)
+
+
+class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
+
+    def post(self, album_id):
+        uploaded_files = self.get_uploads('photo')
+
+        user = users.get_current_user()
+        album = Album.get_by_id(
+            int(album_id),
+            parent=ndb.Key('User', user.email())
+        )
+
+        photo = Photo(parent=album.key)
+        photo.name = self.request.get('photo_name')
+        photo.blob_info_key = uploaded_files[0].key()
+
+        photo.put()
+
+        self.redirect('/album/%s/view' % album.key.integer_id())
+
+
+class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
+
+    def get(self, album_id, photo_id):
+        user = users.get_current_user()
+        album = Album.get_by_id(
+            int(album_id),
+            parent=ndb.Key('User', user.email())
+        )
+        photo = Photo.get_by_id(
+            int(photo_id),
+            parent=album.key
+        )
+
+        self.send_blob(blobstore.BlobInfo.get(photo.blob_info_key))

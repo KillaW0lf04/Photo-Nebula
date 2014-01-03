@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photo Nebula - Add Photo</title>
+</head>
+<body>
+    <h1>Add Photo to '{{ album.name }}'</h1>
+    <p>
+        Please select a photo from your local computer to upload.
+    </p>
+    <form method="post" action="{{ upload_url }}" enctype="multipart/form-data">
+        <label for="photo_name">Name:</label>
+        <input type="text" value="Photo Name" id="photo_name" name="photo_name">
+        <br>
+
+        <input type="file" id="photo" name="photo"/>
+        <br>
+
+        <input type="submit" value="Add Photo"/>
+    </form>
+</body>
+</html>
