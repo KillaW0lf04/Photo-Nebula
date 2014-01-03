@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photo Nebula - Create Album</title>
+</head>
+<body>
+    <h1>Create Album</h1>
+    <p>
+        Create an Album by specifying the necessary details below
+    </p>
+    <form method="post" action="/album/create">
+        <label for="album_name">Name:</label>
+        <input type="text" value="Album Name" name="album_name" id="album_name" />
+        <br>
+
+        <label for="album_desc">Description:</label>
+        <br>
+        <textarea name="album_desc" id="album_desc"></textarea>
+        <br>
+
+        <input type="submit" value="Create" />
+    </form>
+</body>
+</html>
