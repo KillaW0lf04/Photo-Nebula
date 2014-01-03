@@ -20,6 +20,10 @@ class BaseHandler(webapp2.RequestHandler):
         template = env.get_template(template_name)
         self.response.write(template.render(template_values))
 
+    def raise_404(self):
+        self.error(404)
+        self.render_template('404_notfound.html')
+
 
 class MainHandler(BaseHandler):
     def get(self):
@@ -69,17 +73,20 @@ class ViewAlbumHandler(BaseHandler):
             parent=ndb.Key('User', user.email())
         )
 
-        photo_query = Photo.query(
-            ancestor=album.key
-        ).order(Photo.date_created)
+        if album:
+            photo_query = Photo.query(
+                ancestor=album.key
+            ).order(Photo.date_created)
 
-        template_values = {
-            'user': user,
-            'album': album,
-            'photos': photo_query.fetch(None),
-        }
+            template_values = {
+                'user': user,
+                'album': album,
+                'photos': photo_query.fetch(None),
+            }
 
-        self.render_template('view_album.html', template_values)
+            self.render_template('view_album.html', template_values)
+        else:
+            self.raise_404()
 
 
 class AddPhotoHandler(BaseHandler):
