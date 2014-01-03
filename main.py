@@ -1,7 +1,8 @@
 import webapp2
-from views import MainHandler, CreateAlbumHandler
+from views import MainHandler, CreateAlbumHandler, ViewAlbumHandler
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
-    ('/album/create', CreateAlbumHandler),
+    (r'/', MainHandler),
+    (r'/album/create', CreateAlbumHandler),
+    (r'/album/view/(\d+)', ViewAlbumHandler),
 ], debug=True)

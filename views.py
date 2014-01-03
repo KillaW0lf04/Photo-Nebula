@@ -55,5 +55,20 @@ class CreateAlbumHandler(BaseHandler):
 
         album.put()
 
-        # TODO: In the future redirect to the album page
-        self.redirect('/')
+        self.redirect('/album/view/%s' % album.key.integer_id())
+
+
+class ViewAlbumHandler(BaseHandler):
+    def get(self, album_id):
+        user = users.get_current_user()
+        album = Album.get_by_id(
+            int(album_id),
+            parent=ndb.Key('User', user.email())
+        )
+
+        template_values = {
+            'user': user,
+            'album': album,
+        }
+
+        self.render_template('view_album.html', template_values)
