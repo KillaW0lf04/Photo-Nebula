@@ -190,6 +190,9 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 class AddCommentHandler(BaseHandler):
 
+    def get(self, album_id):
+        self.raise_error(404)
+
     def post(self, album_id):
         user = get_user()
         album = Album.get_by_id(
