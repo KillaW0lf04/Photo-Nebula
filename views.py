@@ -20,9 +20,9 @@ class BaseHandler(webapp2.RequestHandler):
         template = env.get_template(template_name)
         self.response.write(template.render(template_values))
 
-    def raise_404(self):
-        self.error(404)
-        self.render_template('404_notfound.html')
+    def raise_error(self, error):
+        self.error(error)
+        self.render_template('%s_notfound.html' % error)
 
 
 class MainHandler(BaseHandler):
@@ -91,7 +91,7 @@ class ViewAlbumHandler(BaseHandler):
 
             self.render_template('view_album.html', template_values)
         else:
-            self.raise_404()
+            self.raise_error(404)
 
 
 class AddPhotoHandler(BaseHandler):
