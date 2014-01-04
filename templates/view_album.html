@@ -21,8 +21,7 @@
     <div id="container">
         {% for photo in photos %}
             <div class="item">
-                <img width="300" height="400"
-                     src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}">
+                <img height="300" src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}">
             </div>
         {% endfor %}
     </div>
