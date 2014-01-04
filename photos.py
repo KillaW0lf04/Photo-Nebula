@@ -1,7 +1,6 @@
-from main import DEFAULT_DOMAIN, get_user
+from main import DEFAULT_DOMAIN_KEY, get_user
 from models import Album, Photo
 
-from google.appengine.ext import ndb
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext.blobstore import blobstore
 
@@ -16,7 +15,7 @@ class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
         if user:
             album = Album.get_by_id(
                 int(album_id),
-                parent=ndb.Key('Domain', DEFAULT_DOMAIN)
+                parent=DEFAULT_DOMAIN_KEY
             )
 
             photo = Photo(parent=album.key)
@@ -36,7 +35,7 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, album_id, photo_id):
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
+            parent=DEFAULT_DOMAIN_KEY
         )
         photo = Photo.get_by_id(
             int(photo_id),

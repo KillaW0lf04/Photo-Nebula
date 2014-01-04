@@ -2,11 +2,10 @@ import webapp2
 import jinja2
 
 from google.appengine.api import users
-from google.appengine.ext import ndb
 from google.appengine.ext.blobstore import blobstore
 
 from models import Album, Photo, Comment
-from utils import get_user, DEFAULT_DOMAIN
+from utils import get_user, DEFAULT_DOMAIN_KEY
 
 
 env = jinja2.Environment(
@@ -68,7 +67,7 @@ class CreateAlbumHandler(BaseHandler):
         user = get_user()
 
         if user:
-            album = Album(parent=ndb.Key('Domain', DEFAULT_DOMAIN))
+            album = Album(parent=DEFAULT_DOMAIN_KEY)
             album.author = user.key
             album.name = self.request.get('album_name')
             album.description = self.request.get('album_desc')
@@ -85,7 +84,7 @@ class ViewAlbumHandler(BaseHandler):
         user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            ndb.Key('Domain', DEFAULT_DOMAIN)
+            DEFAULT_DOMAIN_KEY
         )
 
         if album:
@@ -116,7 +115,7 @@ class AddPhotoHandler(BaseHandler):
         if user:
             album = Album.get_by_id(
                 int(album_id),
-                parent=ndb.Key('Domain', DEFAULT_DOMAIN)
+                parent=DEFAULT_DOMAIN_KEY
             )
             upload_url = blobstore.create_upload_url(
                 '/album/%s/upload-photo' % album.key.integer_id()
@@ -133,7 +132,7 @@ class AddPhotoHandler(BaseHandler):
             self.redirect_to_login()
 
 
-class AddCommentHandler(BaseHandler):
+class AddAlbumCommentHandler(BaseHandler):
 
     def get(self, album_id):
         self.raise_error(404)
@@ -144,7 +143,7 @@ class AddCommentHandler(BaseHandler):
         if user:
             album = Album.get_by_id(
                 int(album_id),
-                parent=ndb.Key('Domain', DEFAULT_DOMAIN)
+                parent=DEFAULT_DOMAIN_KEY
             )
 
             comment = Comment(parent=album.key)
@@ -158,22 +157,55 @@ class AddCommentHandler(BaseHandler):
             self.redirect_to_login()
 
 
+class AddPhotoCommentHandler(BaseHandler):
+
+    def get(self, album_id, photo_id):
+        self.raise_error(404)
+
+    def post(self, album_id, photo_id):
+        user = get_user()
+
+        if user:
+            album = Album.get_by_id(
+                int(album_id),
+                parent=DEFAULT_DOMAIN_KEY
+            )
+            photo = Photo.get_by_id(
+                int(photo_id),
+                parent=album.key
+            )
+
+            comment = Comment(parent=photo.key)
+            comment.text = self.request.get('comment_text')
+            comment.author = user.key
+
+            comment.put()
+
+            self.redirect('/album/%s/photo/%s/view' % (album_id, photo_id))
+        else:
+            self.redirect_to_login()
+
+
 class ViewPhotoHandler(BaseHandler):
 
     def get(self, album_id, photo_id):
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
+            parent=DEFAULT_DOMAIN_KEY
         )
         photo = Photo.get_by_id(
             int(photo_id),
             parent=album.key
         )
 
-        image_url = '%s/album/%s/photo/%s' % (self.request.host_url, album.key.integer_id(), photo.key.integer_id())
+        image_url = '%s/album/%s/photo/%s' % (
+            self.request.host_url,
+            album.key.integer_id(),
+            photo.key.integer_id()
+        )
 
         comments_query = Comment.query(
-            ancestor=album.key
+            ancestor=photo.key
         ).order(-Comment.date_created)
 
         comments = comments_query.fetch(None)

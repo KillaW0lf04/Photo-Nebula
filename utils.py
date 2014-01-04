@@ -3,7 +3,7 @@ from models import User
 from google.appengine.ext import ndb
 from google.appengine.api import users
 
-DEFAULT_DOMAIN = 'default'
+DEFAULT_DOMAIN_KEY = ndb.Key('Domain', 'default')
 
 
 def get_user():
@@ -20,7 +20,7 @@ def get_user():
         user_results = user_query.fetch(1)
 
         if not user_results:
-            user = User(parent=ndb.Key('Domain', DEFAULT_DOMAIN))
+            user = User(parent=ndb.Key('Domain', DEFAULT_DOMAIN_KEY))
             user.nickname = google_user.nickname()
             user.email = google_user.email()
 
