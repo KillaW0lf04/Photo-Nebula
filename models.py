@@ -17,6 +17,7 @@ class Photo(ndb.Model):
 
 
 class Album(ndb.Model):
+    author = ndb.KeyProperty(User, repeated=False)
     name = ndb.StringProperty()
     description = ndb.StringProperty()
     date_created = ndb.DateTimeProperty(auto_now_add=True)

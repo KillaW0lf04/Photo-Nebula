@@ -72,13 +72,8 @@ class MainHandler(BaseHandler):
         login_url = users.create_login_url(self.request.uri)
         logout_url = users.create_logout_url(self.request.uri)
 
-        if user:
-            query = Album.query(
-                ancestor=ndb.Key('Domain', DEFAULT_DOMAIN)
-            ).order(-Album.date_created)
-            albums = query.fetch(10)
-        else:
-            albums = []
+        query = Album.query().order(-Album.date_created)
+        albums = query.fetch(10)
 
         template_values = {
             'user': user,
@@ -97,7 +92,8 @@ class CreateAlbumHandler(BaseHandler):
     def post(self):
         user = get_user()
 
-        album = Album(parent=ndb.Key('User', user.email))
+        album = Album(parent=ndb.Key('Domain', DEFAULT_DOMAIN))
+        album.author = user.key
         album.name = self.request.get('album_name')
         album.description = self.request.get('album_desc')
 
@@ -111,7 +107,7 @@ class ViewAlbumHandler(BaseHandler):
         user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email)
+            ndb.Key('Domain', DEFAULT_DOMAIN)
         )
 
         if album:
@@ -140,7 +136,7 @@ class AddPhotoHandler(BaseHandler):
         user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email)
+            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
         )
         upload_url = blobstore.create_upload_url(
             '/album/%s/upload-photo' % album.key.integer_id()
@@ -163,7 +159,7 @@ class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
         user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email)
+            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
         )
 
         photo = Photo(parent=album.key)
@@ -182,7 +178,7 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
         user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email)
+            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
         )
         photo = Photo.get_by_id(
             int(photo_id),
