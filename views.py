@@ -21,8 +21,20 @@ class BaseHandler(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
     def raise_error(self, error):
+        if error == 404:
+            message = 'The specified page was not found'
+        elif error == 500:
+            message = 'Internal Server Error'
+        else:
+            message = 'An unknown error occured!'
+
+        template_values = {
+            'error_number': error,
+            'error_message': message,
+        }
+
         self.error(error)
-        self.render_template('%s_notfound.html' % error)
+        self.render_template('http_error.html', template_values)
 
 
 class MainHandler(BaseHandler):
