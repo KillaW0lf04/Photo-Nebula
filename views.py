@@ -3,44 +3,15 @@ import jinja2
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
-
-from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext.blobstore import blobstore
 
-from models import Album, Photo, Comment, User
+from models import Album, Photo, Comment
+from utils import get_user, DEFAULT_DOMAIN
+
 
 env = jinja2.Environment(
     loader=jinja2.FileSystemLoader('templates')
 )
-
-DEFAULT_DOMAIN = 'default'
-
-
-def get_user():
-    """
-    Checks if the user has signed in with his/her google account before. If not
-    a new User is created.
-    """
-    google_user = users.get_current_user()
-
-    if google_user:
-        user_query = User.query(
-            User.email == google_user.email()
-        )
-        user_results = user_query.fetch(1)
-
-        if not user_results:
-            user = User(parent=ndb.Key('Domain', DEFAULT_DOMAIN))
-            user.nickname = google_user.nickname()
-            user.email = google_user.email()
-
-            user.put()
-        else:
-            user = user_results[0]
-
-        return user
-    else:
-        return None
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -162,46 +133,6 @@ class AddPhotoHandler(BaseHandler):
             self.redirect_to_login()
 
 
-class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
-
-    def post(self, album_id):
-        uploaded_files = self.get_uploads('photo')
-
-        user = get_user()
-
-        if user:
-            album = Album.get_by_id(
-                int(album_id),
-                parent=ndb.Key('Domain', DEFAULT_DOMAIN)
-            )
-
-            photo = Photo(parent=album.key)
-            photo.author = user.key
-            photo.name = self.request.get('photo_name')
-            photo.blob_info_key = uploaded_files[0].key()
-
-            photo.put()
-
-            self.redirect('/album/%s/view' % album.key.integer_id())
-        else:
-            self.response.write('UNKNOWN SERVER ERROR')
-
-
-class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
-
-    def get(self, album_id, photo_id):
-        album = Album.get_by_id(
-            int(album_id),
-            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
-        )
-        photo = Photo.get_by_id(
-            int(photo_id),
-            parent=album.key
-        )
-
-        self.send_blob(blobstore.BlobInfo.get(photo.blob_info_key))
-
-
 class AddCommentHandler(BaseHandler):
 
     def get(self, album_id):
@@ -213,7 +144,7 @@ class AddCommentHandler(BaseHandler):
         if user:
             album = Album.get_by_id(
                 int(album_id),
-                parent=ndb.Key('User', user.email)
+                parent=ndb.Key('Domain', DEFAULT_DOMAIN)
             )
 
             comment = Comment(parent=album.key)

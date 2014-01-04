@@ -1,4 +1,6 @@
 from views import *
+from photos import *
+
 
 app = webapp2.WSGIApplication([
     (r'/', MainHandler),
