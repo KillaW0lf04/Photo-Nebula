@@ -8,4 +8,5 @@ app = webapp2.WSGIApplication([
     (r'/album/(\d+)/upload-photo', UploadPhotoHandler),
     (r'/album/(\d+)/photo/(\d+)', DownloadPhotoHandler),
     (r'/album/(\d+)/add-comment', AddCommentHandler),
+    (r'/album/(\d+)/photo/(\d+)/view', ViewPhotoHandler),
 ], debug=True)

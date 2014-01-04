@@ -117,7 +117,7 @@ class ViewAlbumHandler(BaseHandler):
 
             comments_query = Comment.query(
                 ancestor=album.key
-            ).order(-Photo.date_created)
+            ).order(-Comment.date_created)
 
             template_values = {
                 'user': user,
@@ -207,3 +207,34 @@ class AddCommentHandler(BaseHandler):
         comment.put()
 
         self.redirect('/album/%s/view' % album.key.integer_id())
+
+
+class ViewPhotoHandler(BaseHandler):
+
+    def get(self, album_id, photo_id):
+        user = get_user()
+        album = Album.get_by_id(
+            int(album_id),
+            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
+        )
+        photo = Photo.get_by_id(
+            int(photo_id),
+            parent=album.key
+        )
+
+        image_url = '%s/album/%s/photo/%s' % (self.request.host_url, album.key.integer_id(), photo.key.integer_id())
+
+        comments_query = Comment.query(
+            ancestor=album.key
+        ).order(-Comment.date_created)
+
+        comments = comments_query.fetch(None)
+
+        template_values = {
+            'image_url': image_url,
+            'photo': photo,
+            'album': album,
+            'comments': comments,
+        }
+
+        self.render_template('view_photo.html', template_values)
