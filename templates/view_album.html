@@ -18,10 +18,15 @@
         <a href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
     </div>
 
+    <div id="photo_name"></div>
+
     <div id="container">
         {% for photo in photos %}
             <div class="item">
-                <img height="300" src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}">
+                <img alt="{{ photo.name }}"
+                     height="300"
+                     src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}"
+                     onmouseover="$('#photo_name').html(this.alt);">
             </div>
         {% endfor %}
     </div>
