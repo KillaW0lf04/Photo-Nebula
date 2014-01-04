@@ -167,6 +167,7 @@ class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
         )
 
         photo = Photo(parent=album.key)
+        photo.author = user.key
         photo.name = self.request.get('photo_name')
         photo.blob_info_key = uploaded_files[0].key()
 

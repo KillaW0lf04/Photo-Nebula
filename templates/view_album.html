@@ -21,6 +21,7 @@
         <button id="shuffle">Shuffle</button>
         <button id="dateSort">Sort by Date</button>
         <button id="nameSort">Sort by Name</button>
+        <button id="authorSort">Sort by Author</button>
         <label for="sortAscending">Sort Ascending<input type="checkbox" id="sortAscending" value="true"/></label>
     </div>
 
@@ -29,14 +30,16 @@
 
     <div id="container">
         {% for photo in photos %}
-            <div class="item">
+            <div class="item"
+                 onmouseover="update_current_photo(this)">
                 <img class="image"
                      alt="{{ photo.name }}"
                      height="300"
-                     src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}"
-                     onmouseover="$('#photo_name').html(this.alt);">
+                     src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}">
                 <input class="date"
                        type="hidden" value="{{ photo.date_created }}"/>
+                <input class="user"
+                       type="hidden" value="{{ photo.author.get().email }}"/>
             </div>
         {% endfor %}
     </div>
@@ -61,6 +64,13 @@
     </div>
 
     <script type="text/javascript">
+        function update_current_photo(elem) {
+            var name = "<b>" + $(elem).find('.image').attr('alt') + "</b>";
+            var author = "<b>" + $(elem).find('.user').val() + "</b>";;
+
+            $('#photo_name').html(name + ' by ' + author);
+        }
+
         var $container = $('#container');
 
         $container.imagesLoaded( function(){
@@ -78,6 +88,9 @@
             },
             date : function ( $elem ) {
               return Date.parse($elem.find('.date').val());
+            },
+            author: function ( $elem ) {
+              return $elem.find('.user').val();
             }
           }
         });
@@ -98,6 +111,13 @@
                 sortBy: 'name',
                 sortAscending: $('#sortAscending').is(':checked')
             });
+        });
+
+        $('#authorSort').click(function() {
+            $container.isotope({
+                sortBy: 'author',
+                sortAscending: $('#sortAscending').is(':checked')
+            })
         });
 
     </script>

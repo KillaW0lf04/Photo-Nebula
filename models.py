@@ -10,6 +10,7 @@ class User(ndb.Model):
 
 
 class Photo(ndb.Model):
+    author = ndb.KeyProperty(User, repeated=False)
     name = ndb.StringProperty()
     blob_info_key = ndb.BlobKeyProperty()
     date_created = ndb.DateTimeProperty(auto_now_add=True)
