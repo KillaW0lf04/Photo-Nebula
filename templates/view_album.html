@@ -46,7 +46,7 @@
 
         {% for comment in comments %}
             <div class="comment">
-                <b>[{{ comment.date_created }}] {{ comment.author }} said: </b>
+                <b>[{{ comment.date_created }}] {{ comment.author.get().email }} said: </b>
                 <blockquote>{{ comment.text }}</blockquote>
             </div>
         {% endfor %}

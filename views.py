@@ -202,7 +202,7 @@ class AddCommentHandler(BaseHandler):
 
         comment = Comment(parent=album.key)
         comment.text = self.request.get('comment_text')
-        comment.author = user.email
+        comment.author = user.key
 
         comment.put()
 

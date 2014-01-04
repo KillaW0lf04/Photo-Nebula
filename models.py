@@ -22,6 +22,6 @@ class Album(ndb.Model):
 
 
 class Comment(ndb.Model):
-    author = ndb.StringProperty()
+    author = ndb.KeyProperty(User, repeated=False)
     text = ndb.StringProperty()
     date_created = ndb.DateTimeProperty(auto_now_add=True)
