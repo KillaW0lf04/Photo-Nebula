@@ -7,11 +7,40 @@ from google.appengine.ext import ndb
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext.blobstore import blobstore
 
-from models import Album, Photo, Comment
+from models import Album, Photo, Comment, User
 
 env = jinja2.Environment(
     loader=jinja2.FileSystemLoader('templates')
 )
+
+DEFAULT_DOMAIN = 'default'
+
+
+def get_user():
+    """
+    Checks if the user has signed in with his/her google account before. If not
+    a new User is created.
+    """
+    google_user = users.get_current_user()
+
+    if google_user:
+        user_query = User.query(
+            User.email == google_user.email()
+        )
+        user_results = user_query.fetch(1)
+
+        if not user_results:
+            user = User(parent=ndb.Key('Domain', DEFAULT_DOMAIN))
+            user.nickname = google_user.nickname()
+            user.email = google_user.email()
+
+            user.put()
+        else:
+            user = user_results[0]
+
+        return user
+    else:
+        return None
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -39,13 +68,13 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        user = users.get_current_user()
+        user = get_user()
         login_url = users.create_login_url(self.request.uri)
         logout_url = users.create_logout_url(self.request.uri)
 
         if user:
             query = Album.query(
-                ancestor=ndb.Key('User', user.email())
+                ancestor=ndb.Key('Domain', DEFAULT_DOMAIN)
             ).order(-Album.date_created)
             albums = query.fetch(10)
         else:
@@ -66,9 +95,9 @@ class CreateAlbumHandler(BaseHandler):
         self.render_template('create_album.html')
 
     def post(self):
-        user = users.get_current_user()
+        user = get_user()
 
-        album = Album(parent=ndb.Key('User', user.email()))
+        album = Album(parent=ndb.Key('User', user.email))
         album.name = self.request.get('album_name')
         album.description = self.request.get('album_desc')
 
@@ -79,10 +108,10 @@ class CreateAlbumHandler(BaseHandler):
 
 class ViewAlbumHandler(BaseHandler):
     def get(self, album_id):
-        user = users.get_current_user()
+        user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email())
+            parent=ndb.Key('User', user.email)
         )
 
         if album:
@@ -108,10 +137,10 @@ class ViewAlbumHandler(BaseHandler):
 
 class AddPhotoHandler(BaseHandler):
     def get(self, album_id):
-        user = users.get_current_user()
+        user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email())
+            parent=ndb.Key('User', user.email)
         )
         upload_url = blobstore.create_upload_url(
             '/album/%s/upload-photo' % album.key.integer_id()
@@ -131,10 +160,10 @@ class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self, album_id):
         uploaded_files = self.get_uploads('photo')
 
-        user = users.get_current_user()
+        user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email())
+            parent=ndb.Key('User', user.email)
         )
 
         photo = Photo(parent=album.key)
@@ -149,10 +178,10 @@ class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
 class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
     def get(self, album_id, photo_id):
-        user = users.get_current_user()
+        user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email())
+            parent=ndb.Key('User', user.email)
         )
         photo = Photo.get_by_id(
             int(photo_id),
@@ -165,15 +194,15 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
 class AddCommentHandler(BaseHandler):
 
     def post(self, album_id):
-        user = users.get_current_user()
+        user = get_user()
         album = Album.get_by_id(
             int(album_id),
-            parent=ndb.Key('User', user.email())
+            parent=ndb.Key('User', user.email)
         )
 
         comment = Comment(parent=album.key)
         comment.text = self.request.get('comment_text')
-        comment.author = user.email()
+        comment.author = user.email
 
         comment.put()
 
