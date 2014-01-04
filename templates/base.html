@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Photo Nebula</title>
+    <title>{% block title %}Photo Nebula{% endblock %}</title>
 
     <script type="text/javascript" src="/static/jquery-1.10.2.min.js"></script>
 
@@ -20,6 +20,10 @@
     <div>
         {% block content %}
         {% endblock %}
+    </div>
+    <div>
+        Cloud Computing Project by <b>Michael Aquilina</b> (2014) <br>
+        <b>University of Bristol</b>
     </div>
 </body>
 </html>

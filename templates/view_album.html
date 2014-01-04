@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block title %}
+    {{ super() }} - {{ album.name }}
+{% endblock %}
+
 {% block head %}
     <link type="text/css" rel="stylesheet" href="/static/isotope.css"/>
     <script type="text/javascript" src="/static/jquery.isotope.min.js"></script>
