@@ -49,7 +49,6 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
         if height:
             img = images.Image(blob_key=photo.blob_info_key)
             img.resize(height=int(height))
-            #img.im_feeling_lucky()  # Automatically adjust image to look good
             img = img.execute_transforms(output_encoding=images.PNG)
 
             self.response.headers['Content-Type'] = 'image/png'
