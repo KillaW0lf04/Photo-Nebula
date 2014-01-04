@@ -15,6 +15,8 @@
     </p>
     <div>
         <button id="shuffle">Shuffle</button>
+        <button id="dateSort">Sort by Date</button>
+        <button id="nameSort">Sort by Name</button>
         <a href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
     </div>
 
@@ -23,10 +25,13 @@
     <div id="container">
         {% for photo in photos %}
             <div class="item">
-                <img alt="{{ photo.name }}"
+                <img class="image"
+                     alt="{{ photo.name }}"
                      height="300"
                      src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}"
                      onmouseover="$('#photo_name').html(this.alt);">
+                <input class="date"
+                       type="hidden" value="{{ photo.date_created }}"/>
             </div>
         {% endfor %}
     </div>
@@ -61,9 +66,29 @@
             });
         });
 
-        $('#shuffle').click(function() {
-            $container.isotope('shuffle')
+        $container.isotope({
+          getSortData : {
+            name : function ( $elem ) {
+              return $elem.find('.image').attr('alt');
+            },
+            date : function ( $elem ) {
+              return Date.parse($elem.find('.date').val());
+            }
+          }
         });
+
+        $('#shuffle').click(function() {
+            $container.isotope('shuffle');
+        });
+
+        $('#dateSort').click(function() {
+            $container.isotope({ sortBy: 'date'});
+        });
+
+        $('#nameSort').click(function() {
+            $container.isotope({ sortBy: 'name'});
+        });
+
     </script>
 </body>
 </html>

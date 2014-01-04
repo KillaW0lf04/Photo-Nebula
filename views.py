@@ -76,7 +76,7 @@ class ViewAlbumHandler(BaseHandler):
         if album:
             photo_query = Photo.query(
                 ancestor=album.key
-            ).order(Photo.date_created)
+            )
 
             comments_query = Comment.query(
                 ancestor=album.key
