@@ -45,6 +45,10 @@ def get_user():
 
 class BaseHandler(webapp2.RequestHandler):
 
+    def redirect_to_login(self):
+        login_url = users.create_login_url(self.request.uri)
+        self.redirect(login_url)
+
     def render_template(self, template_name, template_values={}):
         template = env.get_template(template_name)
         self.response.write(template.render(template_values))
@@ -92,14 +96,17 @@ class CreateAlbumHandler(BaseHandler):
     def post(self):
         user = get_user()
 
-        album = Album(parent=ndb.Key('Domain', DEFAULT_DOMAIN))
-        album.author = user.key
-        album.name = self.request.get('album_name')
-        album.description = self.request.get('album_desc')
+        if user:
+            album = Album(parent=ndb.Key('Domain', DEFAULT_DOMAIN))
+            album.author = user.key
+            album.name = self.request.get('album_name')
+            album.description = self.request.get('album_desc')
 
-        album.put()
+            album.put()
 
-        self.redirect('/album/%s/view' % album.key.integer_id())
+            self.redirect('/album/%s/view' % album.key.integer_id())
+        else:
+            self.redirect_to_login()
 
 
 class ViewAlbumHandler(BaseHandler):
@@ -134,21 +141,25 @@ class ViewAlbumHandler(BaseHandler):
 class AddPhotoHandler(BaseHandler):
     def get(self, album_id):
         user = get_user()
-        album = Album.get_by_id(
-            int(album_id),
-            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
-        )
-        upload_url = blobstore.create_upload_url(
-            '/album/%s/upload-photo' % album.key.integer_id()
-        )
 
-        template_values = {
-            'user': user,
-            'album': album,
-            'upload_url': upload_url,
-        }
+        if user:
+            album = Album.get_by_id(
+                int(album_id),
+                parent=ndb.Key('Domain', DEFAULT_DOMAIN)
+            )
+            upload_url = blobstore.create_upload_url(
+                '/album/%s/upload-photo' % album.key.integer_id()
+            )
 
-        self.render_template('add_photo.html', template_values)
+            template_values = {
+                'user': user,
+                'album': album,
+                'upload_url': upload_url,
+            }
+
+            self.render_template('add_photo.html', template_values)
+        else:
+            self.redirect_to_login()
 
 
 class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
@@ -157,25 +168,28 @@ class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
         uploaded_files = self.get_uploads('photo')
 
         user = get_user()
-        album = Album.get_by_id(
-            int(album_id),
-            parent=ndb.Key('Domain', DEFAULT_DOMAIN)
-        )
 
-        photo = Photo(parent=album.key)
-        photo.author = user.key
-        photo.name = self.request.get('photo_name')
-        photo.blob_info_key = uploaded_files[0].key()
+        if user:
+            album = Album.get_by_id(
+                int(album_id),
+                parent=ndb.Key('Domain', DEFAULT_DOMAIN)
+            )
 
-        photo.put()
+            photo = Photo(parent=album.key)
+            photo.author = user.key
+            photo.name = self.request.get('photo_name')
+            photo.blob_info_key = uploaded_files[0].key()
 
-        self.redirect('/album/%s/view' % album.key.integer_id())
+            photo.put()
+
+            self.redirect('/album/%s/view' % album.key.integer_id())
+        else:
+            self.response.write('UNKNOWN SERVER ERROR')
 
 
 class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
     def get(self, album_id, photo_id):
-        user = get_user()
         album = Album.get_by_id(
             int(album_id),
             parent=ndb.Key('Domain', DEFAULT_DOMAIN)
@@ -195,24 +209,27 @@ class AddCommentHandler(BaseHandler):
 
     def post(self, album_id):
         user = get_user()
-        album = Album.get_by_id(
-            int(album_id),
-            parent=ndb.Key('User', user.email)
-        )
 
-        comment = Comment(parent=album.key)
-        comment.text = self.request.get('comment_text')
-        comment.author = user.key
+        if user:
+            album = Album.get_by_id(
+                int(album_id),
+                parent=ndb.Key('User', user.email)
+            )
 
-        comment.put()
+            comment = Comment(parent=album.key)
+            comment.text = self.request.get('comment_text')
+            comment.author = user.key
 
-        self.redirect('/album/%s/view' % album.key.integer_id())
+            comment.put()
+
+            self.redirect('/album/%s/view' % album.key.integer_id())
+        else:
+            self.redirect_to_login()
 
 
 class ViewPhotoHandler(BaseHandler):
 
     def get(self, album_id, photo_id):
-        user = get_user()
         album = Album.get_by_id(
             int(album_id),
             parent=ndb.Key('Domain', DEFAULT_DOMAIN)
