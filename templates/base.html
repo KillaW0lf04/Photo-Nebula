@@ -12,12 +12,19 @@
 </head>
 <body>
     <div>
-        {% if user %}
-            Signed in as {{ user.email }}
-            <a href="{{ logout_url }}">Logout</a>
-        {% else %}
-            <a href="{{ login_url }}">Login</a>
-        {% endif %}
+        <table style="width: 100%">
+            <tr>
+                <td><a href="/">Cloud Nebula Home</a></td>
+                <td style="text-align: right">
+                    {% if user %}
+                        Signed in as {{ user.email }}
+                        <a href="{{ logout_url }}">Logout</a>
+                    {% else %}
+                        <a href="{{ login_url }}">Login</a>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
     </div>
     <div>
         {% block content %}
