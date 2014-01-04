@@ -10,62 +10,66 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ album.name }}</h1>
-    <p>
-        {{ album.description }}
-    </p>
-    <div>
-        <a href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
-    </div>
-    <div>
-        <h4>Sorting Options</h4>
-        <button id="shuffle">Shuffle</button>
-        <button id="dateSort">Sort by Date</button>
-        <button id="nameSort">Sort by Name</button>
-        <button id="authorSort">Sort by Author</button>
-        <label for="sortAscending">Sort Ascending<input type="checkbox" id="sortAscending" value="true"/></label>
-    </div>
+    <table style="width: 100%">
+        <tr style="vertical-align: top">
+            <td>
+                <div>
+                    <a href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
+                    <button id="shuffle">Shuffle</button>
+                    <button id="dateSort">Sort by Date</button>
+                    <button id="nameSort">Sort by Name</button>
+                    <button id="authorSort">Sort by Author</button>
+                    <label for="sortAscending">Sort Ascending<input type="checkbox" id="sortAscending" value="true"/></label>
+                </div>
+                <!-- Displays the name of the photo the mouse is currently over !-->
+                <div id="photo_name"></div>
 
-    <!-- Displays the name of the photo the mouse is currently over !-->
-    <div id="photo_name"></div>
+                <div id="container">
+                    {% for photo in photos %}
+                        <div class="item"
+                             onmouseover="update_current_photo(this)">
+                            <a href="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}/view">
+                                <img class="image"
+                                 height="300"
+                                 src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}">
+                            </a>
+                            <input class="name"
+                                   type="hidden" value="{{ photo.name }}"/>
+                            <input class="date"
+                                   type="hidden" value="{{ photo.date_created }}"/>
+                            <input class="user"
+                                   type="hidden" value="{{ photo.author.get().email }}"/>
+                        </div>
+                    {% endfor %}
+                </div>
+            </td>
+            <td style="width: 30%">
+                <h1>{{ album.name }}</h1>
+                <p>
+                    {{ album.description }}
+                </p>
 
-    <div id="container">
-        {% for photo in photos %}
-            <div class="item"
-                 onmouseover="update_current_photo(this)">
-                <a href="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}/view">
-                    <img class="image"
-                     height="300"
-                     src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}">
-                </a>
-                <input class="name"
-                       type="hidden" value="{{ photo.name }}"/>
-                <input class="date"
-                       type="hidden" value="{{ photo.date_created }}"/>
-                <input class="user"
-                       type="hidden" value="{{ photo.author.get().email }}"/>
-            </div>
-        {% endfor %}
-    </div>
+                <div id="comments">
+                    <h3>Comments left by Users</h3>
 
-    <div id="comments">
-        <h3>Comments left by Users</h3>
+                    {% for comment in comments %}
+                        <div class="comment">
+                            <b>[{{ comment.date_created }}] {{ comment.author.get().email }} said: </b>
+                            <blockquote>{{ comment.text }}</blockquote>
+                        </div>
+                    {% endfor %}
 
-        {% for comment in comments %}
-            <div class="comment">
-                <b>[{{ comment.date_created }}] {{ comment.author.get().email }} said: </b>
-                <blockquote>{{ comment.text }}</blockquote>
-            </div>
-        {% endfor %}
+                    <h3>Leave a Comment:</h3>
+                    <form method="post" action="/album/{{ album.key.integer_id() }}/add-comment">
+                        <textarea id="comment_text" name="comment_text"></textarea>
 
-        <h3>Leave a Comment:</h3>
-        <form method="post" action="/album/{{ album.key.integer_id() }}/add-comment">
-            <textarea id="comment_text" name="comment_text"></textarea>
-
-            <br>
-            <input type="submit" value="Add Comment"/>
-        </form>
-    </div>
+                        <br>
+                        <input type="submit" value="Add Comment"/>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
 
     <script type="text/javascript">
         function update_current_photo(elem) {
