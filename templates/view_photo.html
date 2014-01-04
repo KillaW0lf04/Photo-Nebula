@@ -8,7 +8,7 @@
 <body>
     <img id="photo" height="600" src="{{ image_url }}" />
     <div>
-        <b>{{ photo.name }}</b> by <b>{{ photo.author.get().email }}</b>
+        <b>{{ photo.name }}</b> by <b>{{ photo.author.get().email }}</b> on <b>{{ photo.date_created }}</b>
     </div>
     <div>
         <label>
