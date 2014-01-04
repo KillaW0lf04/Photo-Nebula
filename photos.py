@@ -6,6 +6,7 @@ from google.appengine.ext.blobstore import blobstore
 
 from google.appengine.api import images
 
+
 class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
 
     def post(self, album_id):
