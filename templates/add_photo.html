@@ -2,21 +2,44 @@
 <html>
 <head>
     <title>Photo Nebula - Add Photo</title>
+
+    <script type="text/javascript" src="/static/jquery-1.10.2.min.js"></script>
 </head>
 <body>
     <h1>Add Photo to '{{ album.name }}'</h1>
     <p>
         Please select a photo from your local computer to upload.
     </p>
-    <form method="post" action="{{ upload_url }}" enctype="multipart/form-data">
+    <form id="photo_form" method="post" action="{{ upload_url }}" enctype="multipart/form-data" onsubmit="return validate_form()">
         <label for="photo_name">Name:</label>
-        <input type="text" value="Photo Name" id="photo_name" name="photo_name">
+        <input type="text" value="" id="photo_name" name="photo_name">
         <br>
 
-        <input type="file" id="photo" name="photo"/>
+        <input type="file" id="photo" name="photo" accept="image/*"/>
         <br>
 
         <input type="submit" value="Add Photo"/>
     </form>
+
+    <script type="text/javascript">
+        function validate_form() {
+            var value = $('#photo').val();
+            var name = $('#photo_name').val();
+
+            if(value == "")
+            {
+                alert("Please select a Photo to upload");
+                return false;
+            }
+
+            if(name == "")
+            {
+                alert("Please specify a name for the Photo being uploaded");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </body>
 </html>
