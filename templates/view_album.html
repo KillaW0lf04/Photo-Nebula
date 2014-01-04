@@ -33,9 +33,10 @@
             <div class="item"
                  onmouseover="update_current_photo(this)">
                 <img class="image"
-                     alt="{{ photo.name }}"
                      height="300"
                      src="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}">
+                <input class="name"
+                       type="hidden" value="{{ photo.name }}"/>
                 <input class="date"
                        type="hidden" value="{{ photo.date_created }}"/>
                 <input class="user"
@@ -65,7 +66,7 @@
 
     <script type="text/javascript">
         function update_current_photo(elem) {
-            var name = "<b>" + $(elem).find('.image').attr('alt') + "</b>";
+            var name = "<b>" + $(elem).find('.name').val() + "</b>";
             var author = "<b>" + $(elem).find('.user').val() + "</b>";;
 
             $('#photo_name').html(name + ' by ' + author);
@@ -84,7 +85,7 @@
         $container.isotope({
           getSortData : {
             name : function ( $elem ) {
-              return $elem.find('.image').attr('alt');
+              return $elem.find('.name').val();
             },
             date : function ( $elem ) {
               return Date.parse($elem.find('.date').val());
