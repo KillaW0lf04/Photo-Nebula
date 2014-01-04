@@ -4,6 +4,7 @@ from models import Album, Photo
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext.blobstore import blobstore
 
+from google.appengine.api import images
 
 class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
 
@@ -42,4 +43,15 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
             parent=album.key
         )
 
-        self.send_blob(blobstore.BlobInfo.get(photo.blob_info_key))
+        height = self.request.get('height')
+
+        if height:
+            img = images.Image(blob_key=photo.blob_info_key)
+            img.resize(height=int(height))
+            #img.im_feeling_lucky()  # Automatically adjust image to look good
+            img = img.execute_transforms(output_encoding=images.PNG)
+
+            self.response.headers['Content-Type'] = 'image/png'
+            self.response.write(img)
+        else:
+            self.send_blob(blobstore.BlobInfo.get(photo.blob_info_key))
