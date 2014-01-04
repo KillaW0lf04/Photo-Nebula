@@ -1,6 +1,14 @@
 from google.appengine.ext import ndb
 
 
+class User(ndb.Model):
+    first_name = ndb.StringProperty()
+    last_name = ndb.StringProperty()
+    nickname = ndb.StringProperty()
+    email = ndb.StringProperty()
+    date_created = ndb.DateTimeProperty(auto_now_add=True)
+
+
 class Photo(ndb.Model):
     name = ndb.StringProperty()
     blob_info_key = ndb.BlobKeyProperty()
