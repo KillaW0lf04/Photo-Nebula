@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Photo Nebula - View Album</title>
+{% extends "base.html" %}
 
+{% block head %}
     <link type="text/css" rel="stylesheet" href="/static/isotope.css"/>
-
-    <script type="text/javascript" src="/static/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="/static/jquery.isotope.min.js"></script>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <h1>{{ album.name }}</h1>
     <p>
         {{ album.description }}
@@ -125,5 +122,4 @@
         });
 
     </script>
-</body>
-</html>
+{% endblock %}

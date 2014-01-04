@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Photo Nebula - View Photo</title>
+{% extends "base.html" %}
 
-    <script type="text/javascript" src="/static/jquery-1.10.2.min.js" ></script>
-</head>
-<body>
+{% block content %}
     <img id="photo" height="600" src="{{ image_url }}" />
     <div>
         <b>{{ photo.name }}</b> by <b>{{ photo.author.get().email }}</b> on <b>{{ photo.date_created }}</b>
@@ -43,5 +38,4 @@
             this.select();
         });
     </script>
-</body>
-</html>
+{% endblock %}

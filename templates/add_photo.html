@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Photo Nebula - Add Photo</title>
+{% extends "base.html" %}
 
-    <script type="text/javascript" src="/static/jquery-1.10.2.min.js"></script>
-</head>
-<body>
+{% block content %}
     <h1>Add Photo to '{{ album.name }}'</h1>
     <p>
         Please select a photo from your local computer to upload.
@@ -41,5 +36,4 @@
             return true;
         }
     </script>
-</body>
-</html>
+{% endblock %}
