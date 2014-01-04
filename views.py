@@ -21,6 +21,12 @@ class BaseHandler(webapp2.RequestHandler):
 
     def render_template(self, template_name, template_values={}):
         template = env.get_template(template_name)
+
+        # Values expected by base
+        template_values['user'] = get_user()
+        template_values['login_url'] = users.create_login_url(self.request.uri)
+        template_values['logout_url'] = users.create_logout_url(self.request.uri)
+
         self.response.write(template.render(template_values))
 
     def raise_error(self, error):
@@ -42,17 +48,10 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        user = get_user()
-        login_url = users.create_login_url(self.request.uri)
-        logout_url = users.create_logout_url(self.request.uri)
-
         query = Album.query().order(-Album.date_created)
         albums = query.fetch(10)
 
         template_values = {
-            'user': user,
-            'login_url': login_url,
-            'logout_url': logout_url,
             'albums': albums,
         }
 

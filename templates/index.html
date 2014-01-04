@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Photo Nebula</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
     <h1>Photo Nebula</h1>
     <div>
         <p>
             Welcome to Photo Nebula - an Image Hosting service in the cloud.
-        </p>
-        <p>
-        {% if user %}
-            Signed in as {{ user.email }}
-            <a href="{{ logout_url }}">Logout</a>
-        {% else %}
-            <a href="{{ login_url }}">Login</a>
-        {% endif %}
         </p>
 
         {% if user %}
@@ -34,5 +23,4 @@
         {% endfor %}
         </ul>
     </div>
-</body>
-</html>
+{% endblock %}
