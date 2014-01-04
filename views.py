@@ -26,7 +26,7 @@ class BaseHandler(webapp2.RequestHandler):
         elif error == 500:
             message = 'Internal Server Error'
         else:
-            message = 'An unknown error occured!'
+            message = 'An unknown error occurred!'
 
         template_values = {
             'error_number': error,
