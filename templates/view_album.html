@@ -14,12 +14,17 @@
         {{ album.description }}
     </p>
     <div>
+        <a href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
+    </div>
+    <div>
+        <h4>Sorting Options</h4>
         <button id="shuffle">Shuffle</button>
         <button id="dateSort">Sort by Date</button>
         <button id="nameSort">Sort by Name</button>
-        <a href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
+        <label for="sortAscending">Sort Ascending<input type="checkbox" id="sortAscending" value="true"/></label>
     </div>
 
+    <!-- Displays the name of the photo the mouse is currently over !-->
     <div id="photo_name"></div>
 
     <div id="container">
@@ -82,11 +87,17 @@
         });
 
         $('#dateSort').click(function() {
-            $container.isotope({ sortBy: 'date'});
+            $container.isotope({
+                sortBy: 'date',
+                sortAscending: $('#sortAscending').is(':checked')
+            });
         });
 
         $('#nameSort').click(function() {
-            $container.isotope({ sortBy: 'name'});
+            $container.isotope({
+                sortBy: 'name',
+                sortAscending: $('#sortAscending').is(':checked')
+            });
         });
 
     </script>
