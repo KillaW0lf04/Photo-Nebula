@@ -6,13 +6,21 @@
     <p>
         Please select a photo from your local computer to upload.
     </p>
-    <form id="photo_form" method="post" action="{{ upload_url }}" enctype="multipart/form-data" onsubmit="return validate_form()">
-        <div>
+    <form id="photo_form"
+          role="form"
+          style="width: 60%"
+          method="post"
+          action="{{ upload_url }}"
+          enctype="multipart/form-data"
+          onsubmit="return validate_form()">
+        <div class="form-group">
             <label>Name</label>
             <input class="form-control" type="text" value="" id="photo_name" name="photo_name">
         </div>
 
-        <input class="form-control" type="file" id="photo" name="photo" accept="image/*"/>
+        <div class="form-group">
+            <input class="form-control" type="file" id="photo" name="photo" accept="image/*"/>
+        </div>
 
         <button class="btn btn-primary" type="submit">Add Photo</button>
     </form>
