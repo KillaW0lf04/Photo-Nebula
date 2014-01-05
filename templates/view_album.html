@@ -14,17 +14,17 @@
         <div class="row-fluid">
             <div class="span8">
                 <div>
-                    <a href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
-                    <button id="shuffle">Shuffle</button>
-                    <button id="dateSort">Sort by Date</button>
-                    <button id="nameSort">Sort by Name</button>
-                    <button id="authorSort">Sort by Author</button>
-                    <label for="sortAscending">Sort Ascending<input type="checkbox" id="sortAscending" value="true"/></label>
+                    <a class="btn btn-default" href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
+                    <button class="btn btn-default" id="shuffle">Shuffle</button>
+                    <button class="btn btn-default" id="dateSort">Sort by Date</button>
+                    <button class="btn btn-default" id="nameSort">Sort by Name</button>
+                    <button class="btn btn-default" id="authorSort">Sort by Author</button>
+                    <input type="checkbox" id="sortAscending" value="true">Sort Ascending</input>
                 </div>
                 <!-- Displays the name of the photo the mouse is currently over !-->
                 <div id="photo_name"></div>
 
-                <div id="container">
+                <div id="container" style="padding: 10px">
                     {% for photo in photos %}
                         <div class="item"
                              onmouseover="update_current_photo(this)">
@@ -43,7 +43,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="span4">
+            <div class="span4" style="padding: 10px">
                 <h1>{{ album.name }}</h1>
                 <p>
                     {{ album.description }}
@@ -59,12 +59,14 @@
                         </div>
                     {% endfor %}
 
-                    <h3>Leave a Comment:</h3>
                     <form method="post" action="/album/{{ album.key.integer_id() }}/add-comment">
-                        <textarea id="comment_text" name="comment_text"></textarea>
+                        <label>Leave a Comment</label>
+                        <textarea class="form-control" id="comment_text" name="comment_text">
+
+                        </textarea>
 
                         <br>
-                        <input type="submit" value="Add Comment"/>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>
