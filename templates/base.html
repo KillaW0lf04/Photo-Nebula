@@ -41,6 +41,14 @@
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
+          <div class="navbar-text navbar-right" style="margin: 0px">
+            {% if user %}
+              Signed in as {{ user.email }}
+              <a class= "btn navbar-btn btn-primary" href="{{ logout_url }}">Logout</a>
+            {% else %}
+              <a class="btn navbar-btn btn-primary" href="{{ login_url }}">Login</a>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
