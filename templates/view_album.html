@@ -27,10 +27,12 @@
                     <button class="btn btn-default" id="authorSort">Sort by Author</button>
 
                     {% if user.key == album.author %}
-                        <a class="btn btn-danger">
+                        <button class="btn btn-danger"
+                                data-toggle="modal"
+                                data-target="#myModal">
                             <span class="glyphicon glyphicon-trash"></span>
                             Delete Album
-                        </a>
+                        </button>
                     {% endif %}
                 </div>
 
@@ -88,6 +90,34 @@
                 </form>
             </div>
         </div>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirm Album Deletion</h4>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you would like to delete this Album?</p>
+                <blockquote>
+                    <b>{{ album.name }}</b>
+                </blockquote>
+                <p>You will <b>not</b> be able to undo your changes</p>
+                <p class="text-danger">
+                    Note that in addition to the album, all photos within the album will also
+                    be deleted.
+                </p>
+              </div>
+              <form method="post"
+                    action="/album/{{ album.key.integer_id() }}/delete"
+                    class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No, Don't Delete</button>
+                <button type="submit" class="btn btn-danger">Yes, Delete!</button>
+              </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </div>
 
     <script type="text/javascript" src="/js/view_album.js"></script>

@@ -6,6 +6,7 @@ from google.appengine.ext.blobstore import blobstore
 
 from models import Album, Photo, Comment
 from utils import get_user, DEFAULT_DOMAIN_KEY
+from photos import delete_photo
 
 
 env = jinja2.Environment(
@@ -219,6 +220,30 @@ class ViewPhotoHandler(BaseHandler):
         self.render_template('view_photo.html', template_values)
 
 
+class DeleteAlbumHandler(BaseHandler):
+
+    def post(self, album_id):
+        album = Album.get_by_id(
+            int(album_id),
+            parent=DEFAULT_DOMAIN_KEY
+        )
+
+        if album.author == get_user().key:
+            photos_query = Photo.query(
+                ancestor=album.key
+            )
+
+            photos = photos_query.fetch(None)
+            for photo in photos:
+                delete_photo(photo)
+
+            album.key.delete()
+
+            self.redirect('/')
+        else:
+            self.raise_error(500)
+
+
 class DeletePhotoHandler(BaseHandler):
 
     def post(self, album_id, photo_id):
@@ -232,13 +257,12 @@ class DeletePhotoHandler(BaseHandler):
         )
 
         if photo.author == get_user().key:
-            # Delete data
-            blobstore.BlobInfo.get(photo.blob_info_key).delete()
-            photo.key.delete()
+            delete_photo(photo)
 
             self.redirect('/album/%s/view' % album_id)
         else:
             self.raise_error('500')
+
 
 class AboutHandler(BaseHandler):
 

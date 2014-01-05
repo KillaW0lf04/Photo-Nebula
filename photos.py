@@ -1,10 +1,16 @@
-from main import DEFAULT_DOMAIN_KEY, get_user
+from utils import DEFAULT_DOMAIN_KEY, get_user
 from models import Album, Photo
 
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext.blobstore import blobstore
 
 from google.appengine.api import images
+
+
+def delete_photo(photo):
+    # Delete data
+    blobstore.BlobInfo.get(photo.blob_info_key).delete()
+    photo.key.delete()
 
 
 class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
