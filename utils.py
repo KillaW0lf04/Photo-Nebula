@@ -20,7 +20,7 @@ def get_user():
         user_results = user_query.fetch(1)
 
         if not user_results:
-            user = User(parent=ndb.Key('Domain', DEFAULT_DOMAIN_KEY))
+            user = User(parent=DEFAULT_DOMAIN_KEY)
             user.nickname = google_user.nickname()
             user.email = google_user.email()
 
