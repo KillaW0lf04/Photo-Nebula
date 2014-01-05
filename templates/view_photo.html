@@ -81,10 +81,12 @@
             </blockquote>
             <p>You will <b>not</b> be able to undo your changes</p>
           </div>
-          <div class="modal-footer">
+          <form method="post"
+                action="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}/delete"
+                class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">No, Don't Delete</button>
-            <button type="button" class="btn btn-danger">Yes, Delete!</button>
-          </div>
+            <button type="submit" class="btn btn-danger">Yes, Delete!</button>
+          </form>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
