@@ -17,7 +17,10 @@
                 <div id="photo_name"></div>
 
                 <div style="padding: 10px">
-                    <a class="btn btn-primary" href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
+                    <a class="btn btn-primary" href="/album/{{ album.key.integer_id() }}/add-photo">
+                        <span class="glyphicon glyphicon-cloud-upload"></span>
+                        Add Photo
+                    </a>
                     <button class="btn btn-default" id="shuffle">Shuffle</button>
                     <button class="btn btn-default" id="dateSort">Sort by Date</button>
                     <button class="btn btn-default" id="nameSort">Sort by Name</button>
