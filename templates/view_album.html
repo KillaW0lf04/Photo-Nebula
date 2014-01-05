@@ -25,6 +25,10 @@
                     <button class="btn btn-default" id="dateSort">Sort by Date</button>
                     <button class="btn btn-default" id="nameSort">Sort by Name</button>
                     <button class="btn btn-default" id="authorSort">Sort by Author</button>
+
+                    {% if user.key == album.author %}
+                        <a class="btn btn-danger">Delete Album</a>
+                    {% endif %}
                 </div>
 
                 <div id="container" style="background: #DDDDDD">
@@ -48,7 +52,10 @@
             </div>
             <div class="span4" style="padding: 10px">
                 <h1>{{ album.name }}</h1>
-                <p>{{ album.description }}</p>
+                <p>
+                    {{ album.description }}
+                    <small>({{ photos|length }} photos)</small>
+                </p>
 
                 <div id="comments" class="container">
                     <label>Comments left by Users</label>
