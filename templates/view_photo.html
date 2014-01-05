@@ -4,20 +4,22 @@
  <div class="container-fluid" style="padding: 10px">
     <div class="row-fluid">
         <div class="span8">
-            <div style="float: right; margin: 0 auto;">
+            <div style="float: right; margin: 0 auto; width: 100%">
                 <div class="form-inline" style="padding: 10px">
                     <a href="/album/{{ album.key.integer_id() }}/view" class="btn btn-primary">
                         <span class="glyphicon glyphicon-circle-arrow-left"></span>
                         Back to Album
                     </a>
                     {% if user.key == photo.author %}
-                        <button class="btn btn-danger">
+                        <button class="btn btn-danger"
+                                data-toggle="modal"
+                                data-target="#myModal">
                             <span class="glyphicon glyphicon-trash"></span>
                             Delete Photo
                         </button>
                     {% endif %}
                 </div>
-                <img id="photo" height="600" src="{{ image_url }}" />
+                <img style="width: 100%;" id="photo" height="600" src="{{ image_url }}" />
                 <div class="form-inline" style="padding: 10px">
                     <label>
                         <span class="glyphicon glyphicon-link"></span>
@@ -64,6 +66,28 @@
                 </form>
         </div>
     </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Confirm Photo Deletion</h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you would like to delete this photo?</p>
+            <blockquote>
+                {{ photo.name }}
+            </blockquote>
+            <p>You will <b>not</b> be able to undo your changes</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No, Don't Delete</button>
+            <button type="button" class="btn btn-danger">Yes, Delete!</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </div>
 
 
