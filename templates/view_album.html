@@ -10,21 +10,21 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding: 10px">
         <div class="row-fluid">
             <div class="span8">
-                <div>
-                    <a class="btn btn-default" href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
+                <!-- Displays the name of the photo the mouse is currently over !-->
+                <div id="photo_name"></div>
+
+                <div style="padding: 10px">
+                    <a class="btn btn-primary" href="/album/{{ album.key.integer_id() }}/add-photo">Add Photo</a>
                     <button class="btn btn-default" id="shuffle">Shuffle</button>
                     <button class="btn btn-default" id="dateSort">Sort by Date</button>
                     <button class="btn btn-default" id="nameSort">Sort by Name</button>
                     <button class="btn btn-default" id="authorSort">Sort by Author</button>
-                    <input type="checkbox" id="sortAscending" value="true">Sort Ascending</input>
                 </div>
-                <!-- Displays the name of the photo the mouse is currently over !-->
-                <div id="photo_name"></div>
 
-                <div id="container" style="padding: 10px">
+                <div id="container" style="background: #DDDDDD">
                     {% for photo in photos %}
                         <div class="item"
                              onmouseover="update_current_photo(this)">
@@ -106,28 +106,38 @@
           }
         });
 
+        var date_ascending = true;
+        var name_ascending = true;
+        var author_ascending = true;
+
         $('#shuffle').click(function() {
             $container.isotope('shuffle');
         });
 
         $('#dateSort').click(function() {
+            date_ascending = !date_ascending;
+
             $container.isotope({
                 sortBy: 'date',
-                sortAscending: $('#sortAscending').is(':checked')
+                sortAscending: date_ascending
             });
         });
 
         $('#nameSort').click(function() {
+            name_ascending = !name_ascending;
+
             $container.isotope({
                 sortBy: 'name',
-                sortAscending: $('#sortAscending').is(':checked')
+                sortAscending: name_ascending
             });
         });
 
         $('#authorSort').click(function() {
+            author_ascending = !author_ascending;
+
             $container.isotope({
                 sortBy: 'author',
-                sortAscending: $('#sortAscending').is(':checked')
+                sortAscending: author_ascending
             })
         });
 
