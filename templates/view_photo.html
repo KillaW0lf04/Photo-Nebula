@@ -1,41 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <img id="photo" height="600" src="{{ image_url }}" />
-    <div>
-        <b>{{ photo.name }}</b> by <b>{{ photo.author.get().email }}</b> on <b>{{ photo.date_created }}</b>
-    </div>
-    <div>
-        <label>
-            Static Url
-            <input id="staticUrl"
-                   type="text"
-                   style="width: 500px"
-                   readonly="true"
-                   value="{{ image_url }}"/>
-        </label>
-    </div>
-    <div>
-        <h3>Comments left by Users</h3>
-        {% for comment in comments %}
-            <div class="comment">
-                <b>[{{ comment.date_created }}] {{ comment.author.get().email }} said: </b>
-                <blockquote>{{ comment.text }}</blockquote>
+ <div class="container-fluid" style="padding: 10px">
+    <div class="row-fluid">
+        <div class="span8">
+            <div style="float: right; margin: 0 auto;">
+                <div class="form-inline" style="padding: 10px">
+                    <a href="/album/{{ album.key.integer_id() }}/view" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                        Back to Album
+                    </a>
+                    {% if user.key == photo.author %}
+                        <button class="btn btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Delete Photo
+                        </button>
+                    {% endif %}
+                </div>
+                <img id="photo" height="600" src="{{ image_url }}" />
+                <div class="form-inline" style="padding: 10px">
+                    <label>
+                        <span class="glyphicon glyphicon-link"></span>
+                        Static Url
+                    </label>
+                    <input id="staticUrl"
+                           class="form-control"
+                           type="text"
+                           style="width: 500px"
+                           readonly="true"
+                           value="{{ image_url }}"/>
+                </div>
             </div>
-        {% endfor %}
+        </div>
+        <div class="span4" style="padding: 10px">
+            <div>
+                <b>{{ photo.name }}</b> by <b>{{ photo.author.get().email }}</b> on <b>{{ photo.date_created }}</b>
+            </div>
+            <div id="comments" class="container">
+                    <label>Comments left by Users</label>
 
-        <h3>Leave a Comment:</h3>
-        <form method="post" action="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}/add-comment">
-            <textarea id="comment_text" name="comment_text"></textarea>
+                    {% for comment in comments %}
+                        <div class="comment">
+                            <blockquote>
+                                {{ comment.text }}
+                                <small><cite title="Source Title">{{ comment.author.get().email }}</cite></small>
+                            </blockquote>
+                        </div>
+                    {% endfor %}
+                </div>
 
-            <br>
-            <input type="submit" value="Add Comment"/>
-        </form>
+                <form method="post" action="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}/add-comment">
+                    <label>
+                        <span class="glyphicon glyphicon-comment"></span>
+                        Leave a Comment
+                    </label>
+                    <textarea class="form-control" id="comment_text" name="comment_text">
+
+                    </textarea>
+
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-default">Clear</button>
+                </form>
+        </div>
     </div>
+</div>
 
-    <script type="text/javascript">
-        $('#staticUrl').focus(function() {
-            this.select();
-        });
-    </script>
+
+<script type="text/javascript">
+    $('#staticUrl').focus(function() {
+        this.select();
+    });
+</script>
 {% endblock %}
