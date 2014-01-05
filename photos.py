@@ -44,14 +44,35 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
             parent=album.key
         )
 
+        # All possible options
         height = self.request.get('height')
+        width = self.request.get('width')
+        rotate = self.request.get('rotate')
 
-        if height:
-            img = images.Image(blob_key=photo.blob_info_key)
-            img.resize(height=int(height))
-            img = img.execute_transforms(output_encoding=images.PNG)
+        if height or width or rotate:
+            try:
+                img = images.Image(blob_key=photo.blob_info_key)
 
-            self.response.headers['Content-Type'] = 'image/png'
-            self.response.write(img)
+                height = None if not height else int(height)
+                width = None if not width else int(width)
+                rotate = None if not rotate else int(rotate)
+
+                if width and height:
+                    # Resizing always preserves aspect ratio
+                    img.resize(height=height, width=width)
+                elif width:
+                    img.resize(width=width)
+                elif height:
+                    img.resize(height=height)
+
+                if rotate:
+                    img.rotate(rotate)
+
+                img = img.execute_transforms(output_encoding=images.PNG)
+
+                self.response.headers['Content-Type'] = 'image/png'
+                self.response.write(img)
+            except images.BadRequestError as e:
+                self.response.write('Unable to process request: %s' % e.message)
         else:
             self.send_blob(blobstore.BlobInfo.get(photo.blob_info_key))
