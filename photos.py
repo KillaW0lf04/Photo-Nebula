@@ -48,6 +48,7 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
         height = self.request.get('height')
         width = self.request.get('width')
         rotate = self.request.get('rotate')
+        lucky = self.request.get('lucky')
 
         if height or width or rotate:
             try:
@@ -56,6 +57,7 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
                 height = None if not height else int(height)
                 width = None if not width else int(width)
                 rotate = None if not rotate else int(rotate)
+                lucky = None if not lucky else bool(lucky)
 
                 if width and height:
                     # Resizing always preserves aspect ratio
@@ -68,11 +70,14 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
                 if rotate:
                     img.rotate(rotate)
 
+                if lucky:
+                    img.im_feeling_lucky()
+
                 img = img.execute_transforms(output_encoding=images.PNG)
 
                 self.response.headers['Content-Type'] = 'image/png'
                 self.response.write(img)
-            except images.BadRequestError as e:
+            except Exception as e:
                 self.response.write('Unable to process request: %s' % e.message)
         else:
             self.send_blob(blobstore.BlobInfo.get(photo.blob_info_key))
