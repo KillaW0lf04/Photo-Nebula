@@ -50,27 +50,29 @@
                 <h1>{{ album.name }}</h1>
                 <p>{{ album.description }}</p>
 
-                <div id="comments">
+                <div id="comments" class="container">
                     <label>Comments left by Users</label>
 
                     {% for comment in comments %}
                         <div class="comment">
-                            <b>[{{ comment.date_created }}] {{ comment.author.get().email }} said: </b>
-                            <blockquote>{{ comment.text }}</blockquote>
+                            <blockquote>
+                                {{ comment.text }}
+                                <small><cite title="Source Title">{{ comment.author.get().email }}</cite></small>
+                            </blockquote>
                         </div>
                     {% endfor %}
-
-                    <form method="post" action="/album/{{ album.key.integer_id() }}/add-comment">
-                        <label>Leave a Comment</label>
-                        <textarea class="form-control" id="comment_text" name="comment_text">
-
-                        </textarea>
-
-                        <br>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="reset" class="btn btn-default">Clear</button>
-                    </form>
                 </div>
+                
+                <form method="post" action="/album/{{ album.key.integer_id() }}/add-comment">
+                    <label>Leave a Comment</label>
+                    <textarea class="form-control" id="comment_text" name="comment_text">
+
+                    </textarea>
+
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-default">Clear</button>
+                </form>
             </div>
         </div>
     </div>
