@@ -67,10 +67,29 @@
 
                     {% for comment in comments %}
                         <div class="comment">
-                            <blockquote>
-                                {{ comment.text }}
-                                <small><cite title="Source Title">{{ comment.author.get().email }}</cite></small>
-                            </blockquote>
+                            <table style="width: auto">
+                                <tr>
+                                    <td style="vertical-align: top">
+                                        {% if user.key == comment.author %}
+                                            <button class="btn btn-default btn-xs"
+                                                    title="Delete Comment">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                            <br>
+                                            <button class="btn btn-default btn-xs"
+                                                    title="Edit Comment">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </button>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <blockquote>
+                                            {{ comment.text }}
+                                            <small><cite title="Source Title">{{ comment.author.get().email }}</cite></small>
+                                        </blockquote>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     {% endfor %}
                 </div>
