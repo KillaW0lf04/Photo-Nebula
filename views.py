@@ -217,3 +217,9 @@ class ViewPhotoHandler(BaseHandler):
         }
 
         self.render_template('view_photo.html', template_values)
+
+
+class AboutHandler(BaseHandler):
+
+    def get(self):
+        self.render_template("about.html")
