@@ -85,7 +85,10 @@
                                     <td>
                                         <blockquote>
                                             {{ comment.text }}
-                                            <small><cite title="Source Title">{{ comment.author.get().email }}</cite></small>
+                                            <small>
+                                                <span class="glyphicon glyphicon-user"></span>
+                                                <cite title="Source Title">{{ comment.author.get().email }}</cite>
+                                            </small>
                                         </blockquote>
                                     </td>
                                 </tr>
