@@ -1,29 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Photo Nebula</h1>
-    <div>
-        <p>
-            Welcome to Photo Nebula - an Image Hosting service in the cloud.
+      <div>
+        <h1>Image Hosting In the Cloud</h1>
+        <p class="lead">
+            Photo Nebula is a simple and easy to use Image Hosting service built with google app engine and various <br>
+            open source technologies.
         </p>
-        <p>
-            Browse all the available Albums and contribute with any Photos you like!
-        </p>
-
-        {% if user %}
-        <p>
-            <a href="/album/create">Create an Album</a>
-        </p>
-        {% endif %}
-    </div>
-    <div>
-        <p>
-            Most Recent Albums:
-        </p>
-        <ul>
-        {% for album in albums %}
-            <li><a href="/album/{{ album.key.integer_id() }}/view">{{ album.name }}</a></li>
-        {% endfor %}
-        </ul>
-    </div>
+        <div>
+            {% if user %}
+            <p>
+                <a href="/album/create">Create an Album</a>
+            </p>
+            {% endif %}
+        </div>
+        <div>
+            <p>
+                Most Recent Albums:
+            </p>
+            <ul>
+            {% for album in albums %}
+                <li><a href="/album/{{ album.key.integer_id() }}/view">{{ album.name }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+     </div>
 {% endblock %}
