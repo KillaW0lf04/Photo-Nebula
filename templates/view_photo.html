@@ -35,6 +35,12 @@
                            style="width: 500px"
                            readonly="true"
                            value="{{ image_url }}"/>
+                    <button class="btn btn-success"
+                            data-toggle="modal"
+                            data-target="#customiseModal">
+                        <span class="glyphicon glyphicon-wrench"></span>
+                        Customise
+                    </button>
                 </div>
             </div>
         </div>
@@ -72,6 +78,65 @@
         </div>
     </div>
 
+    <div class="modal fade" id="customiseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Customise Static Url</h4>
+          </div>
+          <div class="modal-body">
+            <p>Photo Nebula allows you to edit your Images properties before they are downloaded.</p>
+            <table style="width: 90%; margin: auto;">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Width</label>
+                            <input id="width_value" class="form-control" placeholder="Width in Pixels" style="width:200px"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label>Height</label>
+                            <input id="height_value" class="form-control" placeholder="Height in Pixels" style="width:200px"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="input-group">
+                              <div class="input-group-btn">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Rotate<span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                  <li><a href="#" onclick="$('#rotate_value').val('90')">90&deg;</a></li>
+                                  <li><a href="#" onclick="$('#rotate_value').val('180')">180&deg;</a></li>
+                                  <li><a href="#" onclick="$('#rotate_value').val('270')">270&deg;</a></li>
+                                </ul>
+                              </div><!-- /btn-group -->
+                              <input id="rotate_value" type="text" class="form-control" readonly="true" style="width: 80px">
+                            </div><!-- /input-group -->
+                          </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label>Improve with Filter</label>
+                            <input id="filter_value" type="checkbox"/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" onclick="update_static_url()" data-dismiss="modal">Confirm Changes</button>
+              <button type="submit" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -102,5 +167,41 @@
     $('#staticUrl').focus(function() {
         this.select();
     });
+
+    function update_static_url() {
+        var height = $('#height_value').val();
+        var width = $('#width_value').val();
+        var rotate = $('#rotate_value').val();
+        var filter = $('#filter_value').is(':checked');
+
+        var first = true;
+        var image_url = '{{ image_url }}';
+
+        if(height != "" && !isNaN(height)) {
+            image_url += (first)? '?' : '&';
+            image_url += 'height=' + height;
+            first = false;
+        }
+
+        if(width != "" && !isNaN(width)) {
+            image_url += (first)? '?' : '&';
+            image_url += 'width=' + width;
+            first = false;
+        }
+
+        if(rotate != "" && !isNaN(rotate)) {
+            image_url += (first)? '?' : '&';
+            image_url += 'rotate=' + rotate;
+            first = false;
+        }
+
+        if(filter) {
+            image_url += (first)? '?' : '&';
+            image_url += 'lucky=1';
+            first = false;
+        }
+
+        $('#staticUrl').val(image_url);
+    }
 </script>
 {% endblock %}
