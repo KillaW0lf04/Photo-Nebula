@@ -14,6 +14,22 @@ env = jinja2.Environment(
 )
 
 
+def get_covered_albums(query):
+    albums = query.fetch(3)
+
+    for album in albums:
+        photos = Photo.query(
+            ancestor=album.key
+        ).order(-Photo.date_created).fetch(1)
+
+        if photos:
+            album.cover = photos[0].key
+        else:
+            album.cover = None
+
+    return albums
+
+
 class BaseHandler(webapp2.RequestHandler):
 
     def redirect_to_login(self):
@@ -50,17 +66,8 @@ class BaseHandler(webapp2.RequestHandler):
 class MainHandler(BaseHandler):
     def get(self):
         query = Album.query().order(-Album.date_created)
-        albums = query.fetch(3)
 
-        for album in albums:
-            photos = Photo.query(
-                ancestor=album.key
-            ).order(-Photo.date_created).fetch(1)
-
-            if photos:
-                album.cover = photos[0].key
-            else:
-                album.cover = None
+        albums = get_covered_albums(query)
 
         template_values = {
             'albums': albums,
@@ -347,6 +354,22 @@ class EditPhotoHandler(BaseHandler):
             self.redirect('/album/%s/photo/%s/view' % (album_id, photo_id))
         else:
             self.raise_error(500)
+
+
+class BrowseAlbumsHandler(BaseHandler):
+
+    def get(self):
+        query = Album.query(
+            ancestor=DEFAULT_DOMAIN_KEY
+        ).order(-Album.date_created)
+
+        albums = get_covered_albums(query)
+
+        template_values = {
+            'albums': albums
+        }
+
+        self.render_template('browse_albums.html', template_values)
 
 
 class AboutHandler(BaseHandler):
