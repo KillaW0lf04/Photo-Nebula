@@ -108,6 +108,8 @@ class ViewAlbumHandler(BaseHandler):
         )
 
         if album:
+            upload_url = blobstore.create_upload_url('/album/%s/upload-photo' % album_id)
+
             photo_query = Photo.query(
                 ancestor=album.key
             )
@@ -121,6 +123,7 @@ class ViewAlbumHandler(BaseHandler):
                 'album': album,
                 'photos': photo_query.fetch(None),
                 'comments': comments_query.fetch(None),
+                'upload_url': upload_url,
             }
 
             self.render_template('view_album.html', template_values)

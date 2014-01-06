@@ -6,6 +6,25 @@ function update_current_photo(elem) {
 //            $('#photo_name').html(name + ' by ' + author + ' on ' + date);
 }
 
+function validate_form() {
+    var value = $('#photo_file').val();
+    var name = $('#photo_name').val();
+
+    if(value == "")
+    {
+        alert("Please select a Photo to upload");
+        return false;
+    }
+
+    if(name == "")
+    {
+        alert("Please specify a name for the Photo being uploaded");
+        return false;
+    }
+
+    return true;
+}
+
 var $container = $('#container');
 
 $container.imagesLoaded( function(){
