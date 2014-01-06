@@ -4,7 +4,7 @@
  <div class="container-fluid" style="padding: 10px">
     <div class="row-fluid">
         <div class="span8">
-            <div style="float: right; margin: 0 auto; width: auto">
+            <div style="float: right; margin: auto; width: 800px">
                 <div class="form-inline" style="padding: 10px; width: auto">
                     <a href="/album/{{ album.key.integer_id() }}/view" class="btn btn-primary">
                         <span class="glyphicon glyphicon-circle-arrow-left"></span>
@@ -23,7 +23,7 @@
                         </button>
                     {% endif %}
                 </div>
-                <img id="photo" height="600" src="{{ image_url }}" />
+                <img id="photo" style="width: inherit; align-self: center" src="{{ image_url }}" />
                 <div class="form-inline" style="padding: 10px; margin: auto; width: auto; text-align: center;">
                     <label>
                         <span class="glyphicon glyphicon-link"></span>
