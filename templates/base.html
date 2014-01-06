@@ -48,9 +48,15 @@
           <div class="navbar-text navbar-right" style="margin: 0px">
             {% if user %}
               Signed in as {{ user.email }}
-              <a class= "btn navbar-btn btn-primary" href="{{ logout_url }}">Logout</a>
+              <a class= "btn navbar-btn btn-primary" href="{{ logout_url }}">
+                  <span class="glyphicon glyphicon-log-out"></span>
+                  Logout
+              </a>
             {% else %}
-              <a class="btn navbar-btn btn-primary" href="{{ login_url }}">Login</a>
+              <a class="btn navbar-btn btn-primary" href="{{ login_url }}">
+                  <span class="glyphicon glyphicon-log-in"></span>
+                  Login
+              </a>
             {% endif %}
           </div>
         </div>
