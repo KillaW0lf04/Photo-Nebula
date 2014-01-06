@@ -6,8 +6,8 @@
     <p>
         Create an Album by specifying the necessary details below
     </p>
-    <form method="post" action="/album/create">
-        <div>
+    <form role="form" method="post" action="/album/create">
+        <div class="form-group">
             <label>Name</label>
             <input class="form-control"
                    type="text"
@@ -16,12 +16,19 @@
                    id="album_name" />
         </div>
 
-        <div>
+        <div class="form-group">
             <label>Description</label>
-            <textarea class="form-control" name="album_desc" id="album_desc"></textarea>
+            <textarea class="form-control"
+                      rows="3"
+                      name="album_desc"
+                      placeholder="Enter a description of your Album here"
+                      id="album_desc"></textarea>
         </div>
 
-        <button class="btn btn-primary" type="submit">Create</button>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Create Album</button>
+            <button class="btn btn-default" type="reset">Clear</button>
+        </div>
     </form>
 </div>
 {% endblock %}
