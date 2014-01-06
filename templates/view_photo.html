@@ -11,6 +11,10 @@
                         Back to Album
                     </a>
                     {% if user.key == photo.author %}
+                        <a class="btn btn-success" href="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}/edit">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Edit Photo
+                        </a>
                         <button class="btn btn-danger"
                                 data-toggle="modal"
                                 data-target="#myModal">

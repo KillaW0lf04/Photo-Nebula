@@ -298,6 +298,47 @@ class EditAlbumHandler(BaseHandler):
             self.raise_error(500)
 
 
+class EditPhotoHandler(BaseHandler):
+
+    def get(self, album_id, photo_id):
+        album = Album.get_by_id(
+            int(album_id),
+            parent=DEFAULT_DOMAIN_KEY
+        )
+        photo = Photo.get_by_id(
+            int(photo_id),
+            parent=album.key
+        )
+
+        if photo.author == get_user().key:
+            template_values = {
+                'album': album,
+                'photo': photo,
+            }
+
+            self.render_template('edit_photo.html', template_values)
+        else:
+            self.raise_error(500)
+
+    def post(self, album_id, photo_id):
+        album = Album.get_by_id(
+            int(album_id),
+            parent=DEFAULT_DOMAIN_KEY
+        )
+        photo = Photo.get_by_id(
+            int(photo_id),
+            parent=album.key
+        )
+
+        if photo.author == get_user().key:
+            photo.name = self.request.get('photo_name')
+            photo.put()
+
+            self.redirect('/album/%s/photo/%s/view' % (album_id, photo_id))
+        else:
+            self.raise_error(500)
+
+
 class AboutHandler(BaseHandler):
 
     def get(self):

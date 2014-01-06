@@ -13,6 +13,7 @@ app = webapp2.WSGIApplication([
     (r'/album/(\d+)/photo/(\d+)', DownloadPhotoHandler),
     (r'/album/(\d+)/add-comment', AddAlbumCommentHandler),
     (r'/album/(\d+)/photo/(\d+)/view', ViewPhotoHandler),
+    (r'/album/(\d+)/photo/(\d+)/edit', EditPhotoHandler),
     (r'/album/(\d+)/photo/(\d+)/delete', DeletePhotoHandler),
     (r'/album/(\d+)/photo/(\d+)/add-comment', AddPhotoCommentHandler),
     (r'/about', AboutHandler),

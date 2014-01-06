@@ -1,0 +1,30 @@
+    {% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Add Photo to '{{ album.name }}'</h1>
+    <p>
+        Please select a photo from your local computer to upload.
+    </p>
+    <form id="photo_form"
+          role="form"
+          style="width: 60%"
+          method="post"
+          action="/album/{{ album.key.integer_id() }}/photo/{{ photo.key.integer_id() }}/edit"
+          enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Name</label>
+            <input class="form-control"
+                   type="text"
+                   value="{{ photo.name }}"
+                   id="photo_name"
+                   name="photo_name">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Confirm Changes</button>
+            <a class="btn btn-default" href="/album/{{ album.key.integer_id() }}/view">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
