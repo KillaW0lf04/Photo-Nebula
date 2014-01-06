@@ -6,6 +6,18 @@
 
 {% block content %}
 <div class="container">
+    <div class="form-inline" style="margin: 15px">
+        <h2>
+            Browse available Albums
+            <a class="btn btn-primary"
+               href="/album/create">
+                <span class="glyphicon glyphicon-play"></span>
+                Create Album
+            </a>
+        </h2>
+    </div>
+</div>
+<div class="container">
     <div class="row">
     {% for album in albums %}
       <div class="col-sm-6 col-md-4">
