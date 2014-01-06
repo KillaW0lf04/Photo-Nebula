@@ -26,9 +26,20 @@
         {% for album in albums %}
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
+              <div style="text-align: center; margin: 10px 10px 0px 10px;">
+                  <div style="height: 250px; background-color: #DDDDDD;  margin: 0 auto;">
+                    {% if album.cover %}
+                      <a href="/album/{{ album.key.integer_id() }}/view">
+                          <img src="/album/{{ album.key.integer_id() }}/photo/{{ album.cover.integer_id() }}"
+                               style="width: 100%;"/>
+                      </a>
+                    {% endif %}
+                  </div>
+              </div>
               <div class="caption">
                 <h3>{{ album.name }}</h3>
-                <p style="height:100px">{{ album.description }}</p>
+                <p style="height:60px">{{ album.description }}</p>
+
                 <p><a href="/album/{{ album.key.integer_id() }}/view"
                       class="btn btn-primary"
                       role="button">

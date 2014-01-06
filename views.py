@@ -50,7 +50,17 @@ class BaseHandler(webapp2.RequestHandler):
 class MainHandler(BaseHandler):
     def get(self):
         query = Album.query().order(-Album.date_created)
-        albums = query.fetch(10)
+        albums = query.fetch(3)
+
+        for album in albums:
+            photos = Photo.query(
+                ancestor=album.key
+            ).fetch(1)
+
+            if photos:
+                album.cover = photos[0].key
+            else:
+                album.cover = None
 
         template_values = {
             'albums': albums,
