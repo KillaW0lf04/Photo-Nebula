@@ -64,10 +64,12 @@
                     {{ album.description }}
                     <small>({{ photos|length }} photos)</small>
                 </p>
+                <div>
+                    <div id="selected_photo"><br></div>
+                </div>
 
-                <div id="comments" class="container">
-                    <label>Comments left by Users</label>
-
+                <h4>Comments left by Users</h4>
+                <div id="comments" class="container" style="margin-top: 15px">
                     {% for comment in comments %}
                         <div class="comment">
                             <table style="width: auto">
@@ -100,7 +102,7 @@
                         </div>
                     {% endfor %}
                 </div>
-                
+
                 <form method="post" action="/album/{{ album.key.integer_id() }}/add-comment">
                     <label>
                         <span class="glyphicon glyphicon-comment"></span>

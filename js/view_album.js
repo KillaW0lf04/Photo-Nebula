@@ -1,9 +1,9 @@
 function update_current_photo(elem) {
-//            var name = "<b>" + $(elem).find('.name').val() + "</b>";
-//            var author = "<b>" + $(elem).find('.user').val() + "</b>";
-//            var date = "<b>" + $(elem).find('.date').val() + "</b>"
-//
-//            $('#photo_name').html(name + ' by ' + author + ' on ' + date);
+    var name = "<b>" + $(elem).find('.name').val() + "</b>";
+    var author = "<b>" + $(elem).find('.user').val() + "</b>";
+    var date = "<b>" + $(elem).find('.date').val() + "</b>"
+
+    $('#selected_photo').html(name + ' by ' + author);
 }
 
 function validate_form() {
