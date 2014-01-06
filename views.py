@@ -387,3 +387,23 @@ class AboutHandler(BaseHandler):
 
     def get(self):
         self.render_template("about.html")
+
+
+class DeleteAlbumCommentHandler(BaseHandler):
+
+    def get(self, album_id, comment_id):
+        album = Album.get_by_id(
+            int(album_id),
+            parent=DEFAULT_DOMAIN_KEY
+        )
+
+        comment = Comment.query(
+            Comment.parent == album.key
+        ).fetch(None)
+
+        if get_user().key == comment[0].author:
+            comment[0].key.delete()
+
+            self.redirect('/album/%s/view' % album_id)
+        else:
+            self.raise_error(500)

@@ -74,10 +74,11 @@
                                 <tr>
                                     <td style="vertical-align: top">
                                         {% if user.key == comment.author %}
-                                            <button class="btn btn-default btn-xs"
-                                                    title="Delete Comment">
+                                            <a class="btn btn-default btn-xs"
+                                               href="/album/{{ album.key.integer_id() }}/comment/{{ comment.key.integer_id() }}/delete"
+                                               title="Delete Comment">
                                                 <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
+                                            </a>
                                             <br>
                                             <button class="btn btn-default btn-xs"
                                                     title="Edit Comment">
