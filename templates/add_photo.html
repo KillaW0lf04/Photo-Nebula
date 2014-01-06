@@ -15,14 +15,21 @@
           onsubmit="return validate_form()">
         <div class="form-group">
             <label>Name</label>
-            <input class="form-control" type="text" value="" id="photo_name" name="photo_name">
+            <input class="form-control"
+                   type="text"
+                   placeholder="Photo Name"
+                   id="photo_name"
+                   name="photo_name">
         </div>
 
         <div class="form-group">
             <input class="form-control" type="file" id="photo" name="photo" accept="image/*"/>
         </div>
 
-        <button class="btn btn-primary" type="submit">Add Photo</button>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Add Photo</button>
+            <a class="btn btn-default" href="/album/{{ album.key.integer_id() }}/view">Cancel</a>
+        </div>
     </form>
 </div>
 
