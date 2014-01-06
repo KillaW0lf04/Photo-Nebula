@@ -55,7 +55,7 @@ class MainHandler(BaseHandler):
         for album in albums:
             photos = Photo.query(
                 ancestor=album.key
-            ).fetch(1)
+            ).order(-Photo.date_created).fetch(1)
 
             if photos:
                 album.cover = photos[0].key
