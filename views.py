@@ -14,8 +14,8 @@ env = jinja2.Environment(
 )
 
 
-def get_covered_albums(query):
-    albums = query.fetch(3)
+def get_covered_albums(query, fetch=None):
+    albums = query.fetch(fetch)
 
     for album in albums:
         photos = Photo.query(
@@ -67,7 +67,7 @@ class MainHandler(BaseHandler):
     def get(self):
         query = Album.query().order(-Album.date_created)
 
-        albums = get_covered_albums(query)
+        albums = get_covered_albums(query, 3)
 
         template_values = {
             'albums': albums,
