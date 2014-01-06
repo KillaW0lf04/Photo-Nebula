@@ -269,6 +269,35 @@ class DeletePhotoHandler(BaseHandler):
             self.raise_error('500')
 
 
+class EditAlbumHandler(BaseHandler):
+
+    def get(self, album_id):
+        album = Album.get_by_id(
+            int(album_id),
+            parent=DEFAULT_DOMAIN_KEY
+        )
+
+        if get_user().key == album.author:
+            self.render_template('edit_album.html', {'album': album})
+        else:
+            self.raise_error(500)
+
+    def post(self, album_id):
+        album = Album.get_by_id(
+            int(album_id),
+            parent=DEFAULT_DOMAIN_KEY
+        )
+
+        if get_user().key == album.author:
+            album.name = self.request.get('album_name')
+            album.description = self.request.get('album_desc')
+            album.put()
+
+            self.redirect('/album/%s/view' % album_id)
+        else:
+            self.raise_error(500)
+
+
 class AboutHandler(BaseHandler):
 
     def get(self):

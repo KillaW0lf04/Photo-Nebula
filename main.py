@@ -6,6 +6,7 @@ app = webapp2.WSGIApplication([
     (r'/', MainHandler),
     (r'/album/create', CreateAlbumHandler),
     (r'/album/(\d+)/view', ViewAlbumHandler),
+    (r'/album/(\d+)/edit', EditAlbumHandler),
     (r'/album/(\d+)/add-photo', AddPhotoHandler),
     (r'/album/(\d+)/delete', DeleteAlbumHandler),
     (r'/album/(\d+)/upload-photo', UploadPhotoHandler),
