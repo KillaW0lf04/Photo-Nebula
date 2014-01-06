@@ -6,23 +6,53 @@
 
 {% block content %}
 <div class="container">
-    <p class="lead">
-        Photo Nebula
-    </p>
-    <p>
-        A Cloud Computing Project by <b>Michael Aquilina</b> (ma13673)
-        for the University of Bristol (2014)
-    </p>
-    <p>
-        Third Party Technologies
-        <ul>
-            <li>Google App Engine</li>
-            <li>Bootstrap 3</li>
-            <li>JQuery</li>
-            <li>Isotope</li>
-            <li>Jinja2</li>
-            <li>webapp2</li>
-        </ul>
-    </p>
+    <div class="jumbotron">
+        <h2>
+            <span class="glyphicon glyphicon-cloud"></span>
+            Photo Nebula
+            <small>Image Hosting</small>
+        </h2>
+        <p>
+            A Cloud Computing Project by <b>Michael Aquilina</b> (ma13673)
+            for the University of Bristol (2014)
+        </p>
+    </div>
+    <h3>Third Party Open Source Software</h3>
+    <div class="row marketing">
+        <div class="col-lg-6">
+            <h4><a href="https://developers.google.com/appengine/">Google App Engine</a></h4>
+            <p>
+                The entire application is built on Google's very own
+                Software as a Service (SaaS) framework.
+            </p>
+            <h4><a href="http://getbootstrap.com/">Bootstrap 3</a></h4>
+            <p>
+                All the pages make use of Twitter's open source
+                Bootstrap framework
+            </p>
+            <h4><a href="http://jquery.com/">JQuery</a></h4>
+            <p>
+                Interactive controls are made possible with the use of
+                the powerful JQuery engine.
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <h4><a href="http://isotope.metafizzy.co/">Isotope</a></h4>
+            <p>
+                Images displayed in Albums are displayed in a collage like
+                manner through the use of the Isotope library.
+            </p>
+            <h4><a href="http://jinja.pocoo.org/docs/">Jinja2</a></h4>
+            <p>
+                All server side web pages are dynamically served to the user
+                using Jinja2 templates for modular and easy design.
+            </p>
+            <h4><a href="http://webapp-improved.appspot.com/">Webapp2</a></h4>
+            <p>
+                Server side code runs on the python web application framework
+                webapp2.
+            </p>
+        </div>
+    </div>
 </div>
 {% endblock %}
