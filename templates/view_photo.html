@@ -50,8 +50,9 @@
             <div>
                 <b>{{ photo.name }}</b> by <b>{{ photo.author.get().email }}</b> on <b>{{ photo.date_created }}</b>
             </div>
+
+            <h4>Comments left by Users</h4>
             <div id="comments" class="container">
-                    <label>Comments left by Users</label>
 
                     {% for comment in comments %}
                         <div class="comment">
