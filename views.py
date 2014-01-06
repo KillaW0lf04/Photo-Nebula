@@ -93,7 +93,7 @@ class ViewAlbumHandler(BaseHandler):
             )
 
             comments_query = Comment.query(
-                ancestor=album.key
+                Comment.parent == album.key
             ).order(-Comment.date_created)
 
             template_values = {
@@ -149,6 +149,7 @@ class AddAlbumCommentHandler(BaseHandler):
             comment = Comment(parent=album.key)
             comment.text = self.request.get('comment_text')
             comment.author = user.key
+            comment.parent = album.key
 
             comment.put()
 
@@ -178,6 +179,7 @@ class AddPhotoCommentHandler(BaseHandler):
             comment = Comment(parent=photo.key)
             comment.text = self.request.get('comment_text')
             comment.author = user.key
+            comment.parent = photo.key
 
             comment.put()
 
@@ -205,7 +207,7 @@ class ViewPhotoHandler(BaseHandler):
         )
 
         comments_query = Comment.query(
-            ancestor=photo.key
+            Comment.parent == photo.key
         ).order(-Comment.date_created)
 
         comments = comments_query.fetch(None)
