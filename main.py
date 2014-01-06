@@ -4,6 +4,7 @@ from photos import *
 
 app = webapp2.WSGIApplication([
     (r'/', MainHandler),
+    (r'/search', SearchHandler),
     (r'/browse', BrowseAlbumsHandler),
     (r'/album/create', CreateAlbumHandler),
     (r'/album/(\d+)/view', ViewAlbumHandler),

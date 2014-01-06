@@ -356,6 +356,14 @@ class EditPhotoHandler(BaseHandler):
             self.raise_error(500)
 
 
+class SearchHandler(BaseHandler):
+
+    def post(self):
+        q = self.request.get('search_text')
+
+        self.redirect('/browse?q=%s' % q)
+
+
 class BrowseAlbumsHandler(BaseHandler):
 
     def get(self):
