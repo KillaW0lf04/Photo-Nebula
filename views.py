@@ -61,7 +61,10 @@ class MainHandler(BaseHandler):
 
 class CreateAlbumHandler(BaseHandler):
     def get(self):
-        self.render_template('create_album.html')
+        if get_user():
+            self.render_template('create_album.html')
+        else:
+            self.redirect_to_login()
 
     def post(self):
         user = get_user()
