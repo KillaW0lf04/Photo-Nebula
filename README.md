@@ -8,9 +8,10 @@ Published url: http://semiotic-karma-449.appspot.com/
 Third Party Libraries
 ---------------------
 
-Javascript
+CSS/Javascript
 * [JQuery](http://jquery.com/)
 * [Isotope](http://isotope.metafizzy.co/)
+* [Bootstrap 3](http://getbootstrap.com/)
 
 Python
 * [webapp2](http://webapp-improved.appspot.com/)
