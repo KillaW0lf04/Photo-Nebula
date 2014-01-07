@@ -35,7 +35,7 @@ class UploadPhotoHandler(blobstore_handlers.BlobstoreUploadHandler):
 
             self.redirect('/album/%s/view' % album.key.integer_id())
         else:
-            self.response.write('UNKNOWN SERVER ERROR')
+            self.response.write('You must be signed in with your google account to upload photos')
 
 
 class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
