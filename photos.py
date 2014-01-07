@@ -55,6 +55,7 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
         width = self.request.get('width')
         rotate = self.request.get('rotate')
         lucky = self.request.get('lucky')
+        hflip = self.request.get('hflip')
 
         if height or width or rotate:
             try:
@@ -64,6 +65,7 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
                 width = None if not width else int(width)
                 rotate = None if not rotate else int(rotate)
                 lucky = None if not lucky else bool(lucky)
+                hflip = None if not hflip else bool(hflip)
 
                 if width and height:
                     # Resizing always preserves aspect ratio
@@ -75,6 +77,9 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
                 if rotate:
                     img.rotate(rotate)
+
+                if hflip:
+                    img.horizontal_flip()
 
                 if lucky:
                     img.im_feeling_lucky()
