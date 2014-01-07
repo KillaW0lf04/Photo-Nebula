@@ -30,7 +30,7 @@
                   <div style="height: 250px; background-color: #DDDDDD;  margin: 0 auto;">
                     {% if album.cover %}
                       <a href="/album/{{ album.key.integer_id() }}/view">
-                          <img src="/album/{{ album.key.integer_id() }}/photo/{{ album.cover.integer_id() }}"
+                          <img src="/album/{{ album.key.integer_id() }}/photo/{{ album.cover.integer_id() }}?height=250"
                                style="width: auto; height:auto; max-height: 100%"/>
                       </a>
                     {% endif %}
