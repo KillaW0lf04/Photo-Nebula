@@ -57,7 +57,7 @@ class DownloadPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
         lucky = self.request.get('lucky')
         hflip = self.request.get('hflip')
 
-        if height or width or rotate:
+        if height or width or rotate or hflip:
             try:
                 img = images.Image(blob_key=photo.blob_info_key)
 
